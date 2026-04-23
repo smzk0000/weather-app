@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export default function Home() {
   const [city, setCity] = useState("");
-  const [weather, setWeather] = useState(null);
+  const [weather, setWeather] = useState<any>(null);
   const [error, setError] = useState("");
   const fetchWeather = async () => {
     setError("");
