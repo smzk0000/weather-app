@@ -6,13 +6,17 @@ export default function Home() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState<any>(null);
   const [error, setError] = useState("");
+  const [isloading, setIsLoading] = useState(false);
   const fetchWeather = async () => {
     setError("");
+    setIsLoading(true);
     const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
     const res = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=ja`
     );
     const data = await res.json();
+    setIsLoading(false);
+
     if (data.cod !== 200) {
       setError("都市が見つかりませんでした");
       setWeather(null);
@@ -32,6 +36,8 @@ export default function Home() {
         placeholder="都市名を入力"
       />
       <button onClick={fetchWeather}>検索</button>
+
+      {isloading && <p>読み込み中...</p>}
 
       {error && <p>{error}</p>}
 
