@@ -6,7 +6,9 @@ export default function Home() {
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState<any>(null);
   const [error, setError] = useState("");
-  const [isloading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [history, setHistory] = useState<string[]>([]);
+
   const fetchWeather = async () => {
     setError("");
     setIsLoading(true);
@@ -23,6 +25,10 @@ export default function Home() {
       return;
     }
     setWeather(data);
+    setHistory((prev) => {
+      const next = [city, ...prev.filter((h) => h !== city)];
+      return next.slice(0, 5);
+    })
   };
 
 
@@ -37,7 +43,7 @@ export default function Home() {
       />
       <button onClick={fetchWeather}>検索</button>
 
-      {isloading && <p>読み込み中...</p>}
+      {isLoading && <p>読み込み中...</p>}
 
       {error && <p>{error}</p>}
 
@@ -51,6 +57,20 @@ export default function Home() {
           <p>風速：{weather.wind.speed}m/s</p>
         </div>
       )}
+
+      {history.length > 0 && (
+        <div>
+          <h3>検索履歴</h3>
+          <ul>
+            {history.map((h) => (
+              <li key={h} onClick={() => setCity(h)}>
+                {h}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
     </div>
   );
 }
